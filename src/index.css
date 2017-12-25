@@ -6,8 +6,15 @@ html, body, #root {
 
 * {
   box-sizing: border-box;
+  color: #414141;
 }
 
 .full-height {
   height: 100%;
+}
+
+.bg-img {
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
 }

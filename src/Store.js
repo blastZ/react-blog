@@ -5,4 +5,4 @@ const reducer = combineReducers({
   homeReducer: homeReducer
 })
 
-export default createStore(homeReducer);
+export default createStore(reducer);

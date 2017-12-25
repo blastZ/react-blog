@@ -13,6 +13,7 @@ import FavoriteIcon from 'material-ui-icons/Favorite';
 import ShareIcon from 'material-ui-icons/Share';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import MoreVertIcon from 'material-ui-icons/MoreVert';
+import { withRouter } from 'react-router';
 
 const styles = {
   card: {
@@ -40,11 +41,12 @@ const styles = {
 
 class PostCard extends Component {
   render() {
-    const { classes, title, timestamp, shortDescri, cover } = this.props;
+    const { id, classes, title, timestamp, shortDescri, cover } = this.props;
     return (
       <div>
         <Card className={classes.card}>
           <CardHeader
+            onClick={() => this.props.history.push(`/${id}`)}
             action={
               <IconButton>
                 <MoreVertIcon />
@@ -83,4 +85,4 @@ class PostCard extends Component {
   }
 }
 
-export default withStyles(styles)(PostCard);
+export default withStyles(styles)(withRouter(PostCard));
