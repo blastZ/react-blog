@@ -40,7 +40,7 @@ class Container extends Component {
 }
 
 const mapStateToProps = ({ homeReducer }) => ({
-  posts: homeReducer.posts
+  posts: homeReducer.latestPosts
 })
 
 export default withRouter(connect(mapStateToProps)(Container));

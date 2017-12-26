@@ -1,5 +1,6 @@
 import reducer from './reducer';
 import actions from './actions';
-import view from './components/Container';
+import Container from './components/Container';
+import middleware from './middleware';
 
-export { reducer, actions, view }
+export { reducer, actions, Container as view, middleware }

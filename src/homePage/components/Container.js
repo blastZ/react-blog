@@ -1,32 +1,24 @@
 import React, { Component } from 'react';
-import Menu from './Menu';
-import PostList from './PostList';
-import TopBar from './TopBar';
+import { connect } from 'react-redux';
+import { getLatestPosts } from '../actions';
 
-export default class Container extends Component {
-  state = {
-    showMenu: false
+class Container extends Component {
+  componentDidMount() {
+    this.props.dispatch(getLatestPosts());
   }
 
-  shouldShowMenu = () => {
-    this.setState({
-      showMenu: !this.state.showMenu
-    })
+  getRecPosts = () => {
+    fetch()
   }
 
   render() {
     return (
       <div>
-        <TopBar
-          title="Blog"
-          openMenu={this.shouldShowMenu} />
-        <Menu
-          open={this.state.showMenu}
-          closeView={this.shouldShowMenu} />
-        <PostList
-          showPersonalInfo={this.state.showPersonalInfo}
-          openPersonalInfo={this.openPersonalInfo} />
+        HomePage
+        <button onClick={() => this.props.history.push('/all')}>Click Me!</button>
       </div>
     )
   }
 }
+
+export default connect()(Container);

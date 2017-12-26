@@ -46,7 +46,7 @@ class PostCard extends Component {
       <div>
         <Card className={classes.card}>
           <CardHeader
-            onClick={() => this.props.history.push(`/${id}`)}
+            onClick={() => this.props.history.push(`/${this.props.match.params.category}/${id}`)}
             action={
               <IconButton>
                 <MoreVertIcon />

@@ -68,7 +68,7 @@ class PostList extends Component {
 }
 
 const mapStateToProps = ({ homeReducer }) => ({
-  posts: homeReducer.posts
+  posts: homeReducer.latestPosts
 })
 
 export default withStyles(styles)(connect(mapStateToProps)(PostList));

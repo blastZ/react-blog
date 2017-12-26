@@ -1,8 +1,17 @@
-import { combineReducers, createStore } from 'redux';
-import { reducer as homeReducer } from './homePage';
+import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
+import { reducer as homeReducer, middleware as homeMiddleware } from './homePage';
+
+const win = window;
 
 const reducer = combineReducers({
   homeReducer: homeReducer
 })
 
-export default createStore(reducer);
+const storeEnhancers = compose(
+  applyMiddleware(homeMiddleware),
+  (win && win.devToolsExtension) ? win.devToolsExtension() : f => f
+);
+
+const store = createStore(reducer, storeEnhancers);
+
+export default store;
