@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getLatestPosts } from '../actions';
+import TopBar from './TopBar';
+import PostsGrid from './PostsGrid';
+import LinkBar from './LinkBar';
 
 class Container extends Component {
   componentDidMount() {
@@ -13,9 +16,10 @@ class Container extends Component {
 
   render() {
     return (
-      <div>
-        HomePage
-        <button onClick={() => this.props.history.push('/all')}>Click Me!</button>
+      <div style={{width: '100%', height: '100%'}} className="bg-img">
+
+        <PostsGrid />
+        <LinkBar />
       </div>
     )
   }

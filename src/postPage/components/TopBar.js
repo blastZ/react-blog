@@ -5,13 +5,13 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-import MenuIcon from 'material-ui-icons/Menu';
+import BackIcon from 'material-ui-icons/NavigateBefore';
 
 const styles = {
   root: {
     width: '100%',
   },
-  menuButton: {
+  backButton: {
     marginLeft: -12,
     marginRight: 20,
     color: 'white'
@@ -22,15 +22,15 @@ const styles = {
 };
 
 function TopBar(props) {
-  const { classes, title, openMenu } = props;
+  const { classes, title, openMenu, goBack } = props;
   return (
     <div className={classes.root}>
       <AppBar position="fixed" classes={{
         root: classes.appBar
       }}>
         <Toolbar>
-          <IconButton onClick={openMenu} className={classes.menuButton} aria-label="Menu">
-            <MenuIcon />
+          <IconButton onClick={goBack} className={classes.backButton} aria-label="Menu">
+            <BackIcon />
           </IconButton>
           <Typography type="title" color="inherit">
             {title}

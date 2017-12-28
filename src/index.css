@@ -17,3 +17,29 @@ html, body, #root {
   background-repeat: no-repeat !important;
   background-size: cover !important;
 }
+
+.top-out-animation-first {
+  animation: disappearFromTop 700ms ease-in;
+  animation-timing-function:
+}
+
+.top-out-animation-second {
+  animation: disappearFromTop 780ms ease-in;
+  animation-delay: 80ms;
+}
+
+.top-out-animation-third {
+  animation: disappearFromTop 860ms ease-in;
+  animation-delay: 160ms;
+}
+
+@keyframes disappearFromTop {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-900px);
+    opacity: 0;
+  }
+}

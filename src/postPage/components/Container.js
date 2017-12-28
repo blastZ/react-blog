@@ -20,11 +20,16 @@ class Container extends Component {
 
   }
 
+  goBack = () => {
+    this.props.history.goBack();
+  }
+
   render() {
     const { postId, post } = this.state;
     return (
       <div>
-        <TopBar />
+        <TopBar
+          goBack={this.goBack} />
         <div
           className="bg-img"
           style={{
