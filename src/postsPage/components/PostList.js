@@ -20,6 +20,10 @@ class PostList extends Component {
     window.addEventListener('resize', this.addFillBox);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.addFillBox);
+  }
+
   addFillBox = () => {
     const body = document.getElementsByTagName('body')[0];
     const postList = document.getElementById('post-list');

@@ -20,17 +20,159 @@ html, body, #root {
 
 .top-out-animation-first {
   animation: disappearFromTop 700ms ease-in;
-  animation-timing-function:
+  animation-fill-mode: forwards;
 }
 
 .top-out-animation-second {
   animation: disappearFromTop 780ms ease-in;
   animation-delay: 80ms;
+  animation-fill-mode: forwards;
 }
 
 .top-out-animation-third {
-  animation: disappearFromTop 860ms ease-in;
-  animation-delay: 160ms;
+  animation: disappearFromTop 810ms ease-in;
+  animation-delay: 110ms;
+  animation-fill-mode: forwards;
+}
+
+.bottom-in-animation-first {
+  animation: appearFromBottom 700ms ease-out;
+  animation-fill-mode: forwards;
+}
+
+.bottom-in-animation-second {
+  animation: appearFromBottom 780ms ease-out;
+  animation-delay: 80ms;
+  animation-fill-mode: forwards;
+}
+
+.bottom-in-animation-third {
+  animation: appearFromBottom 810ms ease-out;
+  animation-delay: 110ms;
+  animation-fill-mode: forwards;
+}
+
+.anim-num-out {
+  animation: numOut 800ms ease;
+  animation-fill-mode: forwards;
+}
+
+.anim-num-in {
+  animation: numIn 800ms ease ;
+  animation-fill-mode: forwards;
+}
+
+.anim-bar-in {
+  animation: barIn 800ms ease;
+  animation-fill-mode: forwards;
+}
+
+.anim-bar-out {
+  animation: barOut 800ms ease;
+  animation-fill-mode: forwards;
+}
+
+.anim-img-out {
+  animation: imgOut 700ms ease;
+  animation-fill-mode: forwards;
+}
+
+.anim-img-in {
+  animation: imgIn 700ms ease;
+  animation-fill-mode: forwards;
+}
+
+@media screen and (max-width: 1000px) {
+  .disappear-small {
+    display: none !important;
+  }
+
+  .full-width-small {
+    width: 100% !important;
+  }
+
+  .decrease-font-size-small {
+    font-size: 13px !important;
+    font-weight: bold !important;
+    width: 20px !important;
+  }
+
+  .decrease-margin-small {
+    margin-left: 45px !important;
+  }
+}
+
+@keyframes imgIn {
+  0% {
+    transform: translateY(100vh);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes imgOut {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-100vh);
+  }
+}
+
+@keyframes barIn {
+  0% {
+    transform: translateY(120px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes barOut {
+  0% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-120px);
+    opacity: 0;
+  }
+}
+
+@keyframes numOut {
+  0% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(150px);
+    opacity: 0;
+  }
+}
+
+@keyframes numIn {
+  0% {
+    transform: translateX(-150px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes appearFromBottom {
+  0% {
+    transform: translateY(900px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
 }
 
 @keyframes disappearFromTop {

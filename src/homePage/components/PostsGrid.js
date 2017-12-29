@@ -29,6 +29,7 @@ const styles = {
   },
   contentLeft: {
     width: '50%',
+    overflow: 'hidden'
   },
   postTop: {
     width: '100%',
@@ -51,10 +52,14 @@ const styles = {
   },
   postContentMain: {
     width: '50%',
-    height: '200px',
+    height: '200px'
+  },
+  postContentMainContent: {
+    width: '100%',
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   button: {
     width: '80px',
@@ -77,13 +82,18 @@ const styles = {
   },
   input: {
     padding: '0'
+  },
+  barNum: {
+    width: '40px',
   }
 };
 
 class PostsGrid extends Component {
   state = {
     postIndex: 0,
-    animation: false
+    animation: false,
+    touchStart: {x: 0, y: 0},
+    touchEnd: {x: 0, y: 0},
   }
 
   toPost = () => {
@@ -92,37 +102,68 @@ class PostsGrid extends Component {
 
   handleWheel = (e) => {
     const { animation } = this.state;
-    if(!animation) {
-      this.setState({
-        animation: true
-      })
-      setTimeout(() => {
+    if(e.deltaY > 0) {
+      if(!animation) {
         this.setState({
-          animation: false
+          animation: true
+        }, () => {
+          setTimeout(() => {
+            const index = this.state.postIndex + 1;
+            this.setState({
+              animation: false,
+              postIndex: index >= this.props.posts.length ? 0 : index
+            })
+          }, 860)
         })
-      }, 900)
+      }
     }
-    // if(e.deltaY > 0) {
-    //   const index = this.state.postIndex + 1;
-    //   this.setState({
-    //     postIndex: index >= this.props.posts.length ? 0 : index
-    //   })
-    // } else {
-    //   const index = this.state.postIndex - 1;
-    //   this.setState({
-    //     postIndex: index < 0 ? this.props.posts.length - 1 : index
-    //   })
-    // }
+  }
+
+  toPosts = () => {
+    this.props.history.push('/all');
+  }
+
+  handleTouchStart = (e) => {
+    this.setState({
+      touchStart: {x: e.touches[0].clientX, y: e.touches[0].clientY}
+    })
+  }
+
+  handleTouchMove = (e) => {
+    if(e.touches[0]) {
+      this.setState({
+        touchEnd: {x: e.touches[0].clientX, y: e.touches[0].clientY}
+      })
+    }
+  }
+
+  handleTouchEnd = (e) => {
+    const { touchStart, touchEnd, animation } = this.state;
+    if(touchStart.y - touchEnd.y > 20) {
+      if(!animation) {
+        this.setState({
+          animation: true
+        }, () => {
+          setTimeout(() => {
+            const index = this.state.postIndex + 1;
+            this.setState({
+              animation: false,
+              postIndex: index >= this.props.posts.length ? 0 : index
+            })
+          }, 860)
+        })
+      }
+    }
   }
 
   render() {
-    const { postIndex } = this.state;
+    const { postIndex, animation } = this.state;
     const { classes, posts } = this.props;
     return (
-      <div className={classes.root} onWheel={this.handleWheel}>
+      <div className={classes.root} onWheel={this.handleWheel} onTouchStart={this.handleTouchStart} onTouchMove={this.handleTouchMove} onTouchEnd={this.handleTouchEnd}>
         <div className={classes.content}>
           {posts[postIndex] && <div style={{display: 'flex', width: '100%', height: '100%'}}>
-            <div className={classes.contentLeft}>
+            <div className={classNames(classes.contentLeft, 'full-width-small')}>
               <div className={classes.postTop}>
                 <div className={classes.postTopMain}>
                   <Typography type="title">{`Blastz`}</Typography>
@@ -141,42 +182,110 @@ class PostsGrid extends Component {
               </div>
               <div className={classes.postContent}>
                 <div className={classes.postContentMain}>
-                  <Typography type="display1" className={`${this.state.animation ? 'top-out-animation-first' : ''}`}>{posts[postIndex].title}</Typography>
-                  <Typography type="headline" style={{color: '#F5AF01'}} className={`${this.state.animation ? 'top-out-animation-second' : ''}`}>{posts[postIndex].tag[0]}</Typography>
-                  <Typography type="title" className={`${this.state.animation ? 'top-out-animation-second' : ''}`}>{posts[postIndex].timestamp}</Typography>
-                  <Button onClick={this.toPost} raised className={classNames(classes.button, `${this.state.animation ? 'top-out-animation-third' : ''}`)}>Read</Button>
+                  {animation
+                    ? <div style={{width: '100%', height: '100%', position: 'relative'}}>
+                      <div className={classes.postContentMainContent} style={{position: 'absolute', left: '0', top: '0'}}>
+                        <Typography type="display1" className="top-out-animation-first">{posts[postIndex].title}</Typography>
+                        <Typography type="headline" style={{color: '#F5AF01'}} className="top-out-animation-second">{posts[postIndex].tag[0]}</Typography>
+                        <Typography type="title" className="top-out-animation-second">{posts[postIndex].timestamp}</Typography>
+                        <Button onClick={this.toPost} raised className={classNames(classes.button, 'top-out-animation-third')}>Read</Button>
+                      </div>
+                      <div className={classes.postContentMainContent} style={{position: 'absolute', left: '0', top: '0'}}>
+                        <Typography style={{opacity: '0'}} type="display1" className="bottom-in-animation-first">{posts[postIndex + 1 >= posts.length ? 0 : postIndex + 1].title}</Typography>
+                        <Typography style={{opacity: '0', color: '#F5AF01'}} type="headline" className="bottom-in-animation-second">{posts[postIndex + 1 >= posts.length ? 0 : postIndex + 1].tag[0]}</Typography>
+                        <Typography style={{opacity: '0'}} type="title" className="bottom-in-animation-second">{posts[postIndex + 1 >= posts.length ? 0 : postIndex + 1].timestamp}</Typography>
+                        <Button style={{opacity: '0'}} onClick={this.toPost} raised className={classNames(classes.button, 'bottom-in-animation-third')}>Read</Button>
+                      </div>
+                    </div>
+                    : <div className={classes.postContentMainContent}>
+                      <Typography type="display1" >{posts[postIndex].title}</Typography>
+                      <Typography type="headline" style={{color: '#F5AF01'}}>{posts[postIndex].tag[0]}</Typography>
+                      <Typography type="title">{posts[postIndex].timestamp}</Typography>
+                      <Button onClick={this.toPost} raised className={classNames(classes.button)}>Read</Button>
+                    </div>}
+
                 </div>
               </div>
               <div className={classes.postBottom}>
-                <div className={classes.postBottomMain}>
-                  <div style={{display: 'flex', alignItems: 'center'}}>
-                    <Typography type="title">{`${postIndex + 1} of ${posts.length}`}</Typography>
-                    <img src={`${require('../imgs/arrow-right.svg')}`} style={{marginLeft: '8px'}} />
-                  </div>
-                  <div style={{display: 'flex', alignItems: 'center'}}>
-                    <IconButton aria-label="favorite">
-                      <FavoIcon />
-                    </IconButton>
-                    <Typography type="subheading" style={{marginRight: '10px'}}>{posts[postIndex].like}</Typography>
-                    <IconButton aria-label="visit">
-                      <VisibIcon />
-                    </IconButton>
-                    <Typography type="subheading" style={{marginRight: '10px'}}>{posts[postIndex].like}</Typography>
-                    <IconButton aria-label="comment">
-                      <CommentIcon />
-                    </IconButton>
-                    <Typography type="subheading" style={{marginRight: '10px'}}>{posts[postIndex].comments.length}</Typography>
-                  </div>
+                <div className={classNames(classes.postBottomMain, 'decrease-margin-small')}>
+                  {animation
+                    ? <div style={{position: 'relative'}}>
+                      <PostIndexBar
+                        style={{display: 'flex', alignItems: 'center', position: 'absolute'}}
+                        index={postIndex + 1}
+                        count={posts.length}
+                        animation={'OUT'}
+                        toPosts={this.toPosts} />
+                      <PostIndexBar
+                        style={{display: 'flex', alignItems: 'center', opacity: '0'}}
+                        index={postIndex + 2 > posts.length ? 1 : postIndex + 2}
+                        count={posts.length}
+                        animation={'IN'}
+                        toPosts={this.toPosts} />
+                    </div>
+                    : <PostIndexBar
+                      style={{display: 'flex', alignItems: 'center'}}
+                      index={postIndex + 1}
+                      count={posts.length}
+                      toPosts={this.toPosts} />}
+                  {animation
+                    ? <div style={{position: 'relative'}}>
+                      <PostInfoBar
+                        style={{display: 'flex', alignItems: 'center', position: 'absolute'}}
+                        className={classes.barNum}
+                        animation={'OUT'}
+                        post={posts[postIndex]} />
+                      <PostInfoBar
+                        style={{display: 'flex', alignItems: 'center', opacity: '0'}}
+                        className={classes.barNum}
+                        animation={'IN'}
+                        post={posts[postIndex + 1 >= posts.length ? 0 : postIndex + 1]} />
+                    </div>
+                    : <PostInfoBar
+                      style={{display: 'flex', alignItems: 'center'}}
+                      className={classes.barNum}
+                      post={posts[postIndex]} />}
                 </div>
               </div>
             </div>
-            <div className="bg-img" style={{background: `#e3e3e3`, width: '50%', height: '100%'}} />
+            {animation
+              ? <div style={{width: '50%', height: '100%', position: 'relative', overflow: 'hidden'}} className="disappear-small">
+                <div className="bg-img anim-img-out" style={{background: `url(${posts[postIndex].cover})`, width: '100%', height: '100%', position: 'absolute'}} />
+                <div className="bg-img anim-img-in" style={{background: `url(${posts[postIndex + 1 >= posts.length ? 0 : postIndex + 1].cover})`, width: '100%', height: '100%'}} />
+              </div>
+              : <div className="bg-img disappear-small" style={{background: `url(${posts[postIndex].cover})`, width: '50%', height: '100%'}} />}
           </div>}
         </div>
       </div>
     )
   }
 }
+
+const PostInfoBar = ({ style, className, animation, post }) => (
+  <div style={style} className={`${animation === 'IN' && 'anim-bar-in'} ${animation === 'OUT' && 'anim-bar-out'}`}>
+    <IconButton aria-label="favorite">
+      <FavoIcon />
+    </IconButton>
+    <Typography type="subheading" className={classNames(className, 'decrease-font-size-small')}>{post.like}</Typography>
+    <IconButton aria-label="visit">
+      <VisibIcon />
+    </IconButton>
+    <Typography type="subheading" className={classNames(className, 'decrease-font-size-small')}>{post.visit}</Typography>
+    <IconButton aria-label="comment">
+      <CommentIcon />
+    </IconButton>
+    <Typography type="subheading" className={classNames(className, 'decrease-font-size-small')}>{post.comments.length}</Typography>
+  </div>
+)
+
+const PostIndexBar = ({ style, index, count, animation, toPosts }) => (
+  <div style={style} className={`${animation === 'IN' && 'anim-num-in'} ${animation === 'OUT' && 'anim-num-out'}`}>
+    <Typography type="title" style={{whiteSpace: 'nowrap'}}>{`${index} of ${count}`}</Typography>
+    <IconButton onClick={toPosts} aria-label="toPosts" style={{marginLeft: '8px'}}>
+      <img src={`${require('../imgs/arrow-right.svg')}`} />
+    </IconButton>
+  </div>
+)
 
 const mapStateToProps = ({ homeReducer }) => ({
   posts: homeReducer.latestPosts
