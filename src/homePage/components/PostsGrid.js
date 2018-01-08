@@ -65,6 +65,7 @@ const styles = {
     width: '80px',
     background: '#F5AF01',
     color: 'white',
+    marginTop: '5px'
   },
   postBottom: {
     height: '64px',
@@ -92,8 +93,8 @@ class PostsGrid extends Component {
   state = {
     postIndex: 0,
     animation: false,
-    touchStart: {x: 0, y: 0},
-    touchEnd: {x: 0, y: 0},
+    touchStart: {x: -1, y: -1},
+    touchEnd: {x: -1, y: -1},
   }
 
   toPost = () => {
@@ -102,20 +103,18 @@ class PostsGrid extends Component {
 
   handleWheel = (e) => {
     const { animation } = this.state;
-    if(e.deltaY > 0) {
-      if(!animation) {
-        this.setState({
-          animation: true
-        }, () => {
-          setTimeout(() => {
-            const index = this.state.postIndex + 1;
-            this.setState({
-              animation: false,
-              postIndex: index >= this.props.posts.length ? 0 : index
-            })
-          }, 860)
-        })
-      }
+    if(e.deltaY > 0 && !animation) {
+      this.setState({
+        animation: true
+      }, () => {
+        setTimeout(() => {
+          const index = this.state.postIndex + 1;
+          this.setState({
+            animation: false,
+            postIndex: index >= this.props.posts.length ? 0 : index
+          })
+        }, 920)
+      })
     }
   }
 
@@ -134,26 +133,40 @@ class PostsGrid extends Component {
       this.setState({
         touchEnd: {x: e.touches[0].clientX, y: e.touches[0].clientY}
       })
+    } else {
+      this.setState({
+        touchStart: {x: -1, y: -1},
+        touchEnd: {x: -1, y: -1}
+      })
     }
   }
 
   handleTouchEnd = (e) => {
     const { touchStart, touchEnd, animation } = this.state;
-    if(touchStart.y - touchEnd.y > 20) {
-      if(!animation) {
-        this.setState({
-          animation: true
-        }, () => {
-          setTimeout(() => {
-            const index = this.state.postIndex + 1;
-            this.setState({
-              animation: false,
-              postIndex: index >= this.props.posts.length ? 0 : index
-            })
-          }, 860)
-        })
-      }
+    if(!animation && touchEnd.x >= 0 && touchEnd.y >= 0 && touchStart.y - touchEnd.y > 20) {
+      this.setState({
+        animation: true,
+        touchStart: {x: -1, y: -1},
+        touchEnd: {x: -1, y: -1}
+      }, () => {
+        setTimeout(() => {
+          const index = this.state.postIndex + 1;
+          this.setState({
+            animation: false,
+            postIndex: index >= this.props.posts.length ? 0 : index
+          })
+        }, 920)
+      })
+    } else {
+      this.setState({
+        touchStart: {x: -1, y: -1},
+        touchEnd: {x: -1, y: -1}
+      })
     }
+  }
+
+  handleTransitionEnd = () => {
+    console.log('transition end');
   }
 
   render() {
@@ -188,7 +201,7 @@ class PostsGrid extends Component {
                         <Typography type="display1" className="top-out-animation-first">{posts[postIndex].title}</Typography>
                         <Typography type="headline" style={{color: '#F5AF01'}} className="top-out-animation-second">{posts[postIndex].tag[0]}</Typography>
                         <Typography type="title" className="top-out-animation-second">{posts[postIndex].timestamp}</Typography>
-                        <Button onClick={this.toPost} raised className={classNames(classes.button, 'top-out-animation-third')}>Read</Button>
+                        <Button onClick={this.toPost} raised onTransitionEnd={this.handleTransitionEnd} className={classNames(classes.button, 'top-out-animation-third')}>Read</Button>
                       </div>
                       <div className={classes.postContentMainContent} style={{position: 'absolute', left: '0', top: '0'}}>
                         <Typography style={{opacity: '0'}} type="display1" className="bottom-in-animation-first">{posts[postIndex + 1 >= posts.length ? 0 : postIndex + 1].title}</Typography>
@@ -288,7 +301,7 @@ const PostIndexBar = ({ style, index, count, animation, toPosts }) => (
 )
 
 const mapStateToProps = ({ homeReducer }) => ({
-  posts: homeReducer.latestPosts
+  posts: homeReducer.posts
 })
 
 export default withStyles(styles)(withRouter(connect(mapStateToProps)(PostsGrid)));

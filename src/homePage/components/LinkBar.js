@@ -27,15 +27,23 @@ const styles = {
 };
 
 class LinkBar extends Component {
+  openGithub = () => {
+    window.open('https://www.github.com/blastZ');
+  }
+
+  openStack = () => {
+    window.open('https://stackoverflow.com/users/7636114/z-blast?tab=profile');
+  }
+
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
         <div className={classes.divider} />
-        <IconButton className={classes.button} aria-label="github">
+        <IconButton className={classes.button} aria-label="github" onClick={this.openGithub}>
           <img className={classes.image} src={`${require('../imgs/github.svg')}`} />
         </IconButton>
-        <IconButton className={classes.button} aria-label="github">
+        <IconButton className={classes.button} aria-label="github" onClick={this.openStack}>
           <img className={classes.image} src={`${require('../imgs/stackoverflow.svg')}`} />
         </IconButton>
         <IconButton className={classes.button} aria-label="github">

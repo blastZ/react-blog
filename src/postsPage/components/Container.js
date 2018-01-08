@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import Menu from './Menu';
 import PostList from './PostList';
 import TopBar from './TopBar';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { action } from '../../homePage';
 
-export default class Container extends Component {
+class Container extends Component {
   state = {
     showMenu: false
   }
@@ -12,6 +15,13 @@ export default class Container extends Component {
     this.setState({
       showMenu: !this.state.showMenu
     })
+  }
+
+  componentDidMount() {
+    if(this.props.posts.length === 0) {
+      const category = this.props.match.params.category;
+      this.props.dispatch({type: 'GET_POSTS', category});
+    }
   }
 
   render() {
@@ -30,3 +40,9 @@ export default class Container extends Component {
     )
   }
 }
+
+const mapStateToProps = ({ homeReducer }) => ({
+  posts: homeReducer.posts
+})
+
+export default withRouter(connect(mapStateToProps)(Container));

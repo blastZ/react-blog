@@ -1,16 +1,16 @@
-import { GET_LATEST_POSTS } from './actions';
+import { GET_POSTS } from './actions';
 
 const initState = {
-  latestPosts: []
+  posts: []
 }
 
 const reducer = (state=initState, action) => {
-  const { latestPosts } = action;
+  const { posts } = action;
 
   switch (action.type) {
-    case GET_LATEST_POSTS: {
+    case GET_POSTS: {
       return {
-        latestPosts
+        posts
       }
     }
     default: return state;

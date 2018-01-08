@@ -8,6 +8,16 @@ html, body, #root {
   box-sizing: border-box;
 }
 
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:hover {
+  color: #47cebb;
+  cursor: pointer;
+}
+
 .full-height {
   height: 100%;
 }

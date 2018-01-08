@@ -47,6 +47,12 @@ class PostList extends Component {
     }
   }
 
+  componentDidUpdate = (preProps) => {
+    if(preProps.posts.length !== this.props.posts.length) {
+      this.addFillBox();
+    }
+  }
+
   render() {
     const { classes, showPersonalInfo } = this.props;
     const { posts } = this.props;
@@ -72,7 +78,7 @@ class PostList extends Component {
 }
 
 const mapStateToProps = ({ homeReducer }) => ({
-  posts: homeReducer.latestPosts
+  posts: homeReducer.posts
 })
 
 export default withStyles(styles)(connect(mapStateToProps)(PostList));

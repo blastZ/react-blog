@@ -1,5 +1,6 @@
-export const GET_LATEST_POSTS = 'GET_LATEST_POSTS';
+export const GET_POSTS = 'GET_POSTS';
 
-export const getLatestPosts = () => ({
-  type: GET_LATEST_POSTS
+export const getPosts = (category) => ({
+  type: GET_POSTS,
+  category
 })

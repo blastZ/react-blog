@@ -7,6 +7,9 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
 import Typography from 'material-ui/Typography';
+import { connect } from 'react-redux';
+import { actions } from '../../homePage';
+import { withRouter } from 'react-router-dom';
 
 const styles = {
   paper: {
@@ -26,11 +29,15 @@ const styles = {
 class Menu extends Component {
   state = {
     tagList: [
-      {name: 'All', num: 20},
-      {name: 'React', num: 10},
-      {name: 'Node.js', num: 5},
-      {name: 'React Native', num: 5}
+      {name: 'All', value: 'all', num: 3},
+      {name: 'React', value: 'react', num: 2},
+      {name: 'Node.js', value: 'node.js', num: 1},
     ],
+  }
+
+  toCategory = (category) => () => {
+    this.props.history.replace(`/${category}`);
+    this.props.dispatch({type: 'GET_POSTS', category});
   }
 
   render() {
@@ -71,7 +78,7 @@ class Menu extends Component {
               </div>
               <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'white'}}>
                 <Typography type="title" color="inherit">
-                  {`20`}
+                  {`3`}
                 </Typography>
                 <Typography color="inherit" style={{marginTop: '12px', opacity: '0.9'}}>
                   {`转载`}
@@ -82,7 +89,7 @@ class Menu extends Component {
           <Divider />
           <List>
             {tagList.map((tag) => (
-              <ListItem key={tag.name} button>
+              <ListItem key={tag.name} button onClick={this.toCategory(tag.value)}>
                 <ListItemText primary={tag.name} />
                 <Typography>
                   {tag.num}
@@ -96,4 +103,4 @@ class Menu extends Component {
   }
 }
 
-export default withStyles(styles)(Menu);
+export default withStyles(styles)(withRouter(connect()(Menu)));

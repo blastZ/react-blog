@@ -13,9 +13,23 @@ class Container extends Component {
 
   componentDidMount() {
     const postId = this.props.match.params.postId;
+    let post = this.props.posts.filter((post) => (post.id === postId))[0];
+    if(!post) {
+      post = {
+        id: 'ABCDEFGfdsa',
+        title: 'React全栈技术详解',
+        timestamp: 'September 20, 2017',
+        tag: ['React'],
+        shortDescri: 'This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like.',
+        cover: `http://localhost:5001/posts/imgs/1.jpg`,
+        like: 5,
+        visit: 10,
+        comments: []
+      }
+    }
     this.setState({
       postId,
-      post: this.props.posts.filter((post) => (post.id === postId))[0]
+      post
     })
 
   }
@@ -45,7 +59,7 @@ class Container extends Component {
 }
 
 const mapStateToProps = ({ homeReducer }) => ({
-  posts: homeReducer.latestPosts
+  posts: homeReducer.posts
 })
 
 export default withRouter(connect(mapStateToProps)(Container));
