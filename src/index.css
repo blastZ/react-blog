@@ -18,6 +18,17 @@ a:hover {
   cursor: pointer;
 }
 
+pre {
+  background: #e3e3e3;
+  overflow: auto;
+  padding: 15px 5px;
+}
+
+code {
+  padding: 5px;
+  margin: 0 5px;
+}
+
 .full-height {
   height: 100%;
 }

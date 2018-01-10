@@ -17,8 +17,12 @@ import { withRouter } from 'react-router';
 
 const styles = {
   card: {
-    maxWidth: 400,
+    height: 450,
+    maxHeight: 450,
+    width: 400,
+    maxWidth: '100%',
     marginBottom: 32,
+    overflow: 'hidden'
   },
   media: {
     height: 194,
@@ -43,7 +47,7 @@ class PostCard extends Component {
   render() {
     const { id, classes, title, timestamp, shortDescri, cover } = this.props;
     return (
-      <div>
+      <div style={{maxWidth: '100%'}}>
         <Card className={classes.card}>
           <CardHeader
             onClick={() => this.props.history.push(`/${this.props.match.params.category}/${id}`)}
@@ -65,20 +69,6 @@ class PostCard extends Component {
               {shortDescri}
             </Typography>
           </CardContent>
-          <CardActions disableActionSpacing>
-            <IconButton aria-label="Add to favorites">
-              <FavoriteIcon />
-            </IconButton>
-            <IconButton aria-label="Share">
-              <ShareIcon />
-            </IconButton>
-            <div className={classes.flexGrow} />
-            <IconButton
-              aria-label="Show more"
-            >
-              <ExpandMoreIcon />
-            </IconButton>
-          </CardActions>
         </Card>
       </div>
     )

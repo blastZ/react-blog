@@ -3,6 +3,7 @@ import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
+import { withRouter } from 'react-router-dom';
 
 const styles = {
   authorInfoContainer: {
@@ -43,11 +44,33 @@ const styles = {
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
+  },
+  textRoot: {
+    marginBottom: '24px'
+  },
+  captionRoot: {
+    marginBottom: '24px'
   }
 }
 
 class Post extends Component {
+  state = {
+    content: []
+  }
+
+  componentDidMount() {
+    const { category, postId } = this.props.match.params;
+    fetch(`http://localhost:5001/${category}/${postId}`)
+      .then((res) => (res.json()))
+      .then((result) => {
+        this.setState({
+          content: result
+        })
+      })
+  }
+
   render() {
+    const { content } = this.state;
     const { post, classes } = this.props;
     return (
       <div style={{
@@ -57,63 +80,91 @@ class Post extends Component {
       }}>
         <div style={{marginTop: '64px'}}>
           <Typography type="display2" align="center">
-            The Best Request Is No Request, Revisited
+            {post.title}
           </Typography>
         </div>
         <div style={{margin: '32px 0px'}}>
           <Typography type="subheading" align="left">
-            Over the last decade, web performance optimization has been controlled by one indisputable guideline: the best request is no request. A very humble rule, easy to interpret. Every network call for a resource eliminated improves performance. Every src attribute spared, every link element dropped. But everything has changed now that HTTP/2 is available, hasn’t it? Designed for the modern web, HTTP/2 is more efficient in responding to a larger number of requests than its predecessor. So the question is: does the old rule of reducing requests still hold up?
+             {post.shortDescri}
           </Typography>
         </div>
         <div className={classes.infoContainer}>
           <div className={classes.authorInfoContainer}>
             <div className={classes.authorInfoLeft}>
-              <Avatar alt="avatar" src="https://alistapart.com/d/_made/pix/authors/photos/me_120_120_c1.jpg" className={classes.avatar} />
+              <Avatar alt="avatar" src={post.avatar} className={classes.avatar} />
             </div>
             <div className={classes.authorInfoRight}>
               <div><Typography type="title">
-                Stefan Baumgartner
+                {post.author}
               </Typography></div>
               <div><Typography type="subheading" style={{marginTop: '5px', color: 'rgb(171, 171, 171)'}}>
-                November 28, 2017
+                June 07, 2016
               </Typography></div>
             </div>
           </div>
-          <div className={classes.otherInfoContainer}>
-            <Typography type="subheading" align="center" noWrap="true">
+          {post.reproduce && <div className={classes.otherInfoContainer}>
+            <Typography type="subheading" align="center" noWrap={true}>
               <em>转载自<span style={{color: 'rgb(171, 171, 171)', marginLeft: '13px'}}>Alist Apart</span></em>
             </Typography>
             <Typography type="body2" align="center">
-              <a href="https://alistapart.com/article/the-best-request-is-no-request-revisited">查看原文</a>
+              <a href={post.origin}>查看原文</a>
             </Typography>
-          </div>
+          </div>}
+          {!post.reproduce && <div className={classes.otherInfoContainer}>
+            <Typography type="subheading" align="center" noWrap={true}>
+              <em><span style={{color: 'rgb(171, 171, 171)', marginLeft: '13px'}}>原创文章</span></em>
+            </Typography>
+            <Typography type="body2" align="center" noWrap={true}>
+              <a href={post.origin}>转载请注明出处</a>
+            </Typography>
+          </div>}
         </div>
         <Divider />
         <div style={{padding: '32px 0px'}}>
-          <p>
-            Welcome to your blog post. Use this space to connect with your readers and potential customers in a way that’s current and interesting. Think of it as an ongoing conversation where you can share updates about business, trends, news, and more.
-            <br />You’ll be posting loads of engaging content, so be sure to keep your blog organized with Categories that also allow visitors to explore more of what interests them.
-          </p>
-          <p>
-            Welcome to your blog post. Use this space to connect with your readers and potential customers in a way that’s current and interesting. Think of it as an ongoing conversation where you can share updates about business, trends, news, and more.
-            <br />You’ll be posting loads of engaging content, so be sure to keep your blog organized with Categories that also allow visitors to explore more of what interests them.
-          </p>
-          <p>
-            Welcome to your blog post. Use this space to connect with your readers and potential customers in a way that’s current and interesting. Think of it as an ongoing conversation where you can share updates about business, trends, news, and more.
-            <br />You’ll be posting loads of engaging content, so be sure to keep your blog organized with Categories that also allow visitors to explore more of what interests them.
-          </p>
-          <p>
-            Welcome to your blog post. Use this space to connect with your readers and potential customers in a way that’s current and interesting. Think of it as an ongoing conversation where you can share updates about business, trends, news, and more.
-            <br />You’ll be posting loads of engaging content, so be sure to keep your blog organized with Categories that also allow visitors to explore more of what interests them.
-          </p>
-          <p>
-            Welcome to your blog post. Use this space to connect with your readers and potential customers in a way that’s current and interesting. Think of it as an ongoing conversation where you can share updates about business, trends, news, and more.
-            <br />You’ll be posting loads of engaging content, so be sure to keep your blog organized with Categories that also allow visitors to explore more of what interests them.
-          </p>
+          {content.map((item) => {
+            switch (item.type) {
+              case 'headline': return (
+                <Caption classes={classes}>
+                  {item.value}
+                </Caption>
+              )
+              case 'body': return (
+                <Text classes={classes}>
+                  {item.value}
+                </Text>
+              )
+              case 'code': return (
+                <Text classes={classes}>
+                  <pre><code>{item.value}</code></pre>
+                </Text>
+              )
+              default: return (
+                <Text classes={classes}>
+                  {item.value}
+                </Text>
+              )
+            }
+          })}
         </div>
       </div>
     )
   }
 }
 
-export default withStyles(styles)(Post);
+const Caption = ({ classes, children }) => (
+  <Typography type="headline" align="left" classes={{
+    root: classes.captionRoot
+  }}>
+    {children}
+  </Typography>
+)
+
+const Text = ({ classes, children }) => (
+  <Typography type="subheading" align="left" classes={{
+    root: classes.textRoot
+  }}>
+    {children}
+  </Typography>
+)
+
+export default withStyles(styles)(withRouter(Post));

@@ -199,20 +199,20 @@ class PostsGrid extends Component {
                     ? <div style={{width: '100%', height: '100%', position: 'relative'}}>
                       <div className={classes.postContentMainContent} style={{position: 'absolute', left: '0', top: '0'}}>
                         <Typography type="display1" className="top-out-animation-first">{posts[postIndex].title}</Typography>
-                        <Typography type="headline" style={{color: '#F5AF01'}} className="top-out-animation-second">{posts[postIndex].tag[0]}</Typography>
+                        <Typography type="headline" style={{color: '#F5AF01'}} className="top-out-animation-second">{posts[postIndex].tags[0]}</Typography>
                         <Typography type="title" className="top-out-animation-second">{posts[postIndex].timestamp}</Typography>
                         <Button onClick={this.toPost} raised onTransitionEnd={this.handleTransitionEnd} className={classNames(classes.button, 'top-out-animation-third')}>Read</Button>
                       </div>
                       <div className={classes.postContentMainContent} style={{position: 'absolute', left: '0', top: '0'}}>
                         <Typography style={{opacity: '0'}} type="display1" className="bottom-in-animation-first">{posts[postIndex + 1 >= posts.length ? 0 : postIndex + 1].title}</Typography>
-                        <Typography style={{opacity: '0', color: '#F5AF01'}} type="headline" className="bottom-in-animation-second">{posts[postIndex + 1 >= posts.length ? 0 : postIndex + 1].tag[0]}</Typography>
+                        <Typography style={{opacity: '0', color: '#F5AF01'}} type="headline" className="bottom-in-animation-second">{posts[postIndex + 1 >= posts.length ? 0 : postIndex + 1].tags[0]}</Typography>
                         <Typography style={{opacity: '0'}} type="title" className="bottom-in-animation-second">{posts[postIndex + 1 >= posts.length ? 0 : postIndex + 1].timestamp}</Typography>
                         <Button style={{opacity: '0'}} onClick={this.toPost} raised className={classNames(classes.button, 'bottom-in-animation-third')}>Read</Button>
                       </div>
                     </div>
                     : <div className={classes.postContentMainContent}>
                       <Typography type="display1" >{posts[postIndex].title}</Typography>
-                      <Typography type="headline" style={{color: '#F5AF01'}}>{posts[postIndex].tag[0]}</Typography>
+                      <Typography type="headline" style={{color: '#F5AF01'}}>{posts[postIndex].tags[0]}</Typography>
                       <Typography type="title">{posts[postIndex].timestamp}</Typography>
                       <Button onClick={this.toPost} raised className={classNames(classes.button)}>Read</Button>
                     </div>}

@@ -4,6 +4,7 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton'
+import AppContainer from './AppContainer';
 
 const styles = {
   root: {
@@ -27,6 +28,16 @@ const styles = {
 };
 
 class LinkBar extends Component {
+  state = {
+    showApps: false,
+  }
+
+  shouldShowApps = () => {
+    this.setState({
+      showApps: !this.state.showApps
+    })
+  }
+
   openGithub = () => {
     window.open('https://www.github.com/blastZ');
   }
@@ -36,17 +47,21 @@ class LinkBar extends Component {
   }
 
   render() {
+    const { showApps } = this.state;
     const { classes } = this.props;
     return (
       <div className={classes.root}>
+        <AppContainer
+          open={showApps}
+          closeView={this.shouldShowApps} />
         <div className={classes.divider} />
         <IconButton className={classes.button} aria-label="github" onClick={this.openGithub}>
           <img className={classes.image} src={`${require('../imgs/github.svg')}`} />
         </IconButton>
-        <IconButton className={classes.button} aria-label="github" onClick={this.openStack}>
+        <IconButton className={classes.button} aria-label="stackoverflow" onClick={this.openStack}>
           <img className={classes.image} src={`${require('../imgs/stackoverflow.svg')}`} />
         </IconButton>
-        <IconButton className={classes.button} aria-label="github">
+        <IconButton className={classes.button} aria-label="myapps" onClick={this.shouldShowApps}>
           <img className={classes.image} src={`${require('../imgs/app.svg')}`} />
         </IconButton>
         <div className={classes.divider} style={{flexGrow: '1'}}/>

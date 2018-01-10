@@ -44,7 +44,7 @@ class Menu extends Component {
     const { open, classes, closeView } = this.props;
     const { tagList } = this.state;
     return (
-      <Drawer open={open} onRequestClose={closeView} classes={{
+      <Drawer open={open} onClose={closeView} classes={{
         paper: classes.paper
       }}>
         <div>
